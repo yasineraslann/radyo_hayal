@@ -1,0 +1,40 @@
+﻿name: RADYO HAYAL iOS Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-ios:
+    runs-on: macos-15
+
+    steps:
+      - name: Projeyi indir
+        uses: actions/checkout@v4
+
+      - name: Flutter kurulumu
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Flutter sürümünü kontrol et
+        run: flutter --version
+
+      - name: Paketleri yükle
+        run: flutter pub get
+
+      - name: CocoaPods
+        run: |
+          cd ios
+          pod install
+
+      - name: iOS uygulamasını derle
+        run: flutter build ios --release --no-codesign
+
+      - name: iOS uygulamasını kaydet
+        uses: actions/upload-artifact@v4
+        with:
+          name: RADYO-HAYAL-iOS
+          path: build/ios/iphoneos/Runner.app
