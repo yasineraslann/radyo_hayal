@@ -22,13 +22,16 @@ jobs:
       - name: Flutter sürümünü kontrol et
         run: flutter --version
 
+      - name: iOS dosyalarını hazırla
+        run: flutter create --platforms=ios .
+
       - name: Paketleri yükle
         run: flutter pub get
 
       - name: CocoaPods
         run: |
           cd ios
-          pod install
+          pod install --repo-update
 
       - name: iOS uygulamasını derle
         run: flutter build ios --release --no-codesign
@@ -38,3 +41,4 @@ jobs:
         with:
           name: RADYO-HAYAL-iOS
           path: build/ios/iphoneos/Runner.app
+
